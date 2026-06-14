@@ -29,12 +29,26 @@ const countryCallingCodes = [
 function splitInternationalPhone(value) {
   const normalized = value.replace(/[^\d+]/g, "");
 
-  if (!normalized.startsWith("+")) {
+  let digits = normalized;
+
+  // +237681385261
+  if (digits.startsWith("+")) {
+    digits = digits.slice(1);
+  }
+
+  // 681385261 -> 237681385261
+  if (/^6\d{8}$/.test(digits)) {
+    digits = `237${digits}`;
+  }
+
+  // 237681385261 -> OK
+  if (!/^\d+$/.test(digits)) {
     return null;
   }
 
-  const digits = normalized.slice(1);
-  const countryCode = countryCallingCodes.find((code) => digits.startsWith(code));
+  const countryCode = countryCallingCodes.find((code) =>
+    digits.startsWith(code)
+  );
 
   if (!countryCode || digits.length - countryCode.length < 6) {
     return null;
