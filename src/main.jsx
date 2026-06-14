@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowRight,
@@ -17,9 +17,9 @@ import {
 import "./styles.css";
 
 const launchDate = new Date("2026-09-01T00:00:00+01:00");
-const reservedPlaces = 37;
+const marketingBaseline = 37;
+const fallbackBrevoContacts = 1;
 const totalPlaces = 100;
-const brevoFormAction = "https://0957a9d3.sibforms.com/serve/MUIFAAlAup__toNa2VdD4564PbJ_UKa3WkTv0_kD3Wqi2a9_4LhocwNYP_39tWw12kSSXpi8vx1AtkZV2eiGuSQGgPfFO-28qggSJfh3z0vAfXmjo54kfCepNc-xZEdwaFDz2UQj9E-Rhq2UM7D1AO2qCpC6CYz9OZ6JSklfJndc01emHNINyrtdwhKOjfbUTNpsp6OdogvThtcznQ==";
 const recaptchaSiteKey = "6LdZjf4sAAAAAM5MHpLK16LhiWaezg9c3xkE9Ruh";
 const localDevelopmentHosts = new Set(["localhost", "127.0.0.1", "::1"]);
 const countryCallingCodes = [
@@ -88,6 +88,39 @@ function getTimeLeft() {
   };
 }
 
+function useAnimatedNumber(target, duration = 700) {
+  const [value, setValue] = useState(target);
+  const previousValueRef = useRef(target);
+
+  useEffect(() => {
+    const startValue = previousValueRef.current;
+    previousValueRef.current = target;
+
+    if (startValue === target || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setValue(target);
+      return undefined;
+    }
+
+    const startedAt = performance.now();
+    let animationFrame;
+
+    const animate = (now) => {
+      const elapsed = Math.min((now - startedAt) / duration, 1);
+      const eased = 1 - Math.pow(1 - elapsed, 3);
+      setValue(Math.round(startValue + (target - startValue) * eased));
+
+      if (elapsed < 1) {
+        animationFrame = window.requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [duration, target]);
+
+  return value;
+}
+
 function Countdown() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft);
 
@@ -113,12 +146,43 @@ function Countdown() {
 }
 
 function App() {
-  const progress = useMemo(() => Math.round((reservedPlaces / totalPlaces) * 100), []);
   const isLocalDevelopment = localDevelopmentHosts.has(window.location.hostname);
+  const [brevoContacts, setBrevoContacts] = useState(fallbackBrevoContacts);
   const [submissionStatus, setSubmissionStatus] = useState("idle");
   const [formError, setFormError] = useState("");
   const recaptchaContainerRef = useRef(null);
   const recaptchaWidgetRef = useRef(null);
+  const targetReserved = Math.min(totalPlaces, marketingBaseline + brevoContacts);
+  const displayedReserved = useAnimatedNumber(targetReserved);
+  const displayedRemaining = Math.max(0, totalPlaces - displayedReserved);
+  const progress = Math.min(100, Math.round((displayedReserved / totalPlaces) * 100));
+  const isComplete = displayedReserved >= totalPlaces;
+  const isUrgent = displayedReserved >= 90 && !isComplete;
+
+  const refreshBrevoCount = useCallback(async (forceRefresh = false) => {
+    try {
+      const endpoint = forceRefresh ? "/api/brevo-count?refresh=1" : "/api/brevo-count";
+      const response = await fetch(endpoint, { cache: "no-store" });
+      const body = await response.json();
+
+      if (!response.ok || !Number.isFinite(body?.brevoContacts)) {
+        throw new Error(body?.error || `Brevo count failed with status ${response.status}.`);
+      }
+
+      if (body.fallback) {
+        console.warn("[Brevo count] API fallback is active:", body);
+      }
+
+      setBrevoContacts(Math.max(0, body.brevoContacts));
+    } catch (error) {
+      console.error("[Brevo count] Unable to refresh waiting-list count:", error);
+      setBrevoContacts((current) => Math.max(current, fallbackBrevoContacts));
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshBrevoCount();
+  }, [refreshBrevoCount]);
 
   useEffect(() => {
     if (isLocalDevelopment) {
@@ -184,18 +248,21 @@ function App() {
       return;
     }
 
-    const formData = new FormData(form);
-    formData.delete("WHATSAPP");
-    formData.delete("CONSENT");
-    formData.set("SMS__COUNTRY_CODE", phoneParts.countryCode);
-    formData.set("SMS", phoneParts.localNumber);
-
     setSubmissionStatus("submitting");
 
     try {
-      const response = await fetch(`${brevoFormAction}?isAjax=1`, {
+      const response = await fetch("/api/brevo-subscribe", {
         method: "POST",
-        body: formData,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          PRENOM: form.elements.PRENOM.value,
+          EMAIL: form.elements.EMAIL.value,
+          SMS: phoneParts.localNumber,
+          SMS__COUNTRY_CODE: phoneParts.countryCode,
+          captchaResponse,
+        }),
       });
 
       console.log("[Brevo] HTTP response status:", response.status);
@@ -211,6 +278,7 @@ function App() {
       form.reset();
       setSubmissionStatus("success");
       setFormError("");
+      await refreshBrevoCount(true);
       if (!isLocalDevelopment) {
         window.grecaptcha?.reset(recaptchaWidgetRef.current);
       }
@@ -282,16 +350,16 @@ function App() {
               <div className="absolute -bottom-5 left-4 right-4 rounded-md border border-brand-brown/12 bg-white p-4 shadow-soft">
                 <div className="grid grid-cols-2 gap-3">
                   <p className="m-0 text-sm font-bold text-brand-brown">
-                    <span className="block font-serif text-2xl">{reservedPlaces}</span>
+                    <span className="block font-serif text-2xl">{displayedReserved}</span>
                     places réservées
                   </p>
                   <p className="m-0 border-l border-brand-brown/12 pl-3 text-sm font-bold text-brand-clay">
-                    <span className="block font-serif text-2xl">{totalPlaces - reservedPlaces}</span>
-                    places restantes
+                    <span className="block font-serif text-2xl">{displayedRemaining}</span>
+                    {displayedRemaining === 1 ? "place restante" : "places restantes"}
                   </p>
                 </div>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-brand-beige">
-                  <div className="h-full rounded-full bg-brand-brown" style={{ width: `${progress}%` }} />
+                  <div className="waiting-progress-fill h-full rounded-full bg-brand-brown" style={{ width: `${progress}%` }} />
                 </div>
               </div>
             </div>
@@ -304,20 +372,30 @@ function App() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.12em] text-brand-clay">Liste d'attente</p>
-              <div id="waiting-title" className="mt-2 flex flex-wrap gap-x-8 gap-y-2">
-                <p className="m-0 font-serif text-2xl font-semibold text-brand-brown">
-                  {reservedPlaces} places réservées
-                </p>
-                <p className="m-0 font-serif text-2xl font-semibold text-brand-clay">
-                  {totalPlaces - reservedPlaces} places restantes
-                </p>
-              </div>
+              {isComplete ? (
+                <h2 id="waiting-title" className="mt-2 font-serif text-2xl font-semibold text-brand-brown">
+                  Les Premiers Haïana sont complets.
+                </h2>
+              ) : (
+                <div id="waiting-title" className="mt-2 flex flex-wrap gap-x-8 gap-y-2">
+                  <p className="m-0 font-serif text-2xl font-semibold text-brand-brown">
+                    {displayedReserved} places réservées
+                  </p>
+                  <p className="m-0 font-serif text-2xl font-semibold text-brand-clay">
+                    {displayedRemaining} {displayedRemaining === 1 ? "place restante" : "places restantes"}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="w-full sm:max-w-md">
               <div className="h-3 overflow-hidden rounded-full bg-brand-beige" aria-hidden="true">
-                <div className="h-full rounded-full bg-brand-brown" style={{ width: `${progress}%` }} />
+                <div className="waiting-progress-fill h-full rounded-full bg-brand-brown" style={{ width: `${progress}%` }} />
               </div>
-              <p className="mt-2 text-sm text-brand-ink/68">Les inscriptions sont ouvertes pour Les Premiers.</p>
+              <p className="mt-2 text-sm text-brand-ink/68">
+                {isComplete
+                  ? "Vous pouvez toujours rejoindre la liste d'attente générale pour être informé(e) du lancement."
+                  : "Les inscriptions sont ouvertes pour Les Premiers."}
+              </p>
             </div>
           </div>
         </div>
@@ -417,13 +495,27 @@ function App() {
           </p> */}
         </div>
 
-        <form
-          className="rounded-md border border-brand-brown/12 bg-white p-5 shadow-warm sm:p-7"
-          action={brevoFormAction}
-          method="POST"
-          onSubmit={handleSubmit}
-          data-brevo-ready="true"
-        >
+        <div className="grid gap-4">
+          {isUrgent && (
+            <p className="m-0 rounded-md border border-brand-clay/25 bg-brand-cream p-4 text-sm font-bold leading-6 text-brand-brown" role="status">
+              ⚠️ Plus que {displayedRemaining} places disponibles pour rejoindre Les Premiers Haïana.
+            </p>
+          )}
+          {isComplete && (
+            <div className="rounded-md border border-brand-brown/15 bg-brand-cream p-4 text-brand-brown" role="status">
+              <p className="m-0 font-serif text-xl font-semibold">Les Premiers Haïana sont complets.</p>
+              <p className="mt-2 mb-0 text-sm leading-6">
+                Vous pouvez toujours rejoindre la liste d'attente générale pour être informé(e) du lancement.
+              </p>
+            </div>
+          )}
+          <form
+            className="rounded-md border border-brand-brown/12 bg-white p-5 shadow-warm sm:p-7"
+            action="/api/brevo-subscribe"
+            method="POST"
+            onSubmit={handleSubmit}
+            data-brevo-ready="true"
+          >
           <div className="grid gap-5">
             <label className="grid gap-2 font-bold text-brand-brown">
               Prénom
@@ -446,10 +538,6 @@ function App() {
               <p className="m-0">Les 100 premiers inscrits recevront leur code de réduction avant le lancement.</p>
             </div>
             {!isLocalDevelopment && <div className="recaptcha-shell" ref={recaptchaContainerRef} />}
-            <input type="hidden" name="SMS" defaultValue="" />
-            <input type="hidden" name="SMS__COUNTRY_CODE" defaultValue="" />
-            <input type="hidden" name="email_address_check" defaultValue="" />
-            <input type="hidden" name="locale" defaultValue="fr" />
             <button className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-brand-brown px-7 font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-brownDark focus:outline-none focus:ring-2 focus:ring-brand-clay focus:ring-offset-2 focus:ring-offset-white disabled:cursor-wait disabled:opacity-70" type="submit" disabled={submissionStatus === "submitting"}>
               {submissionStatus === "submitting" ? "Inscription en cours..." : "Je réserve ma place"}
               <ArrowRight size={19} aria-hidden="true" />
@@ -465,7 +553,8 @@ function App() {
               </p>
             )}
           </div>
-        </form>
+          </form>
+        </div>
       </section>
 
       <section className="border-y border-brand-brown/10 bg-white/54 py-16" aria-labelledby="teaser-title">
