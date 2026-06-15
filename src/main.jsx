@@ -558,7 +558,7 @@ function App() {
             </button>
             {submissionStatus === "success" && (
               <p className="whitespace-pre-line rounded-md bg-brand-cream p-3 text-sm font-semibold leading-6 text-brand-brown" role="status">
-                {"Bienvenue parmi Les Premiers ! 🌿\nTu seras notifié dès le lancement de la Ligne Locks.\nVérifie ton WhatsApp et ta boîte mail."}
+                {"Bienvenue parmi Les Premiers ! 🌿\nTu seras notifié dès le lancement de la Ligne Locks.\nVérifie ta boîte mail."}
               </p>
             )}
             {submissionStatus === "error" && (
