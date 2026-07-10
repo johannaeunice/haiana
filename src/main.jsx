@@ -17,7 +17,7 @@ import {
 import "./styles.css";
 
 const launchDate = new Date("2026-09-01T00:00:00+01:00");
-const marketingBaseline = 37;
+const marketingBaseline = 7;
 const fallbackBrevoContacts = 1;
 const totalPlaces = 100;
 const recaptchaSiteKey = "6LdZjf4sAAAAAM5MHpLK16LhiWaezg9c3xkE9Ruh";
