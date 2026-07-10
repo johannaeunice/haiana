@@ -62,17 +62,17 @@ function splitInternationalPhone(value) {
 
 const products = [
   {
-    name: "Huile Routine Locks",
+    name: "Essence: Huile Routine Locks",
     image: "/essence.png",
     description: "Pour nourrir les longueurs et préserver la souplesse des locks.",
   },
   {
-    name: "Huile Spéciale Pousse",
+    name: "Croissance: Huile Stimulante Cuire Chevelu",
     image: "/croissance.png",
     description: "Pour accompagner la croissance et maintenir un cuir chevelu sain.",
   },
   {
-    name: "Beurre Whippé Locks",
+    name: "Nutrition: Beurre Whippé Locs",
     image: "/beurre_whippé.png",
     description: "Pour nourrir intensément et protéger les locks de la sécheresse.",
   },
@@ -425,15 +425,13 @@ function App() {
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {products.map((product, index) => (
             <article className="group rounded-md border border-brand-brown/12 bg-white p-5 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-warm" key={product.name}>
-              <div className="grid aspect-[1.08] place-items-center rounded-sm bg-brand-cream overflow-hidden">
-
-    <img
-        src={product.image}
-        alt={product.name}
-        className="max-h-[310px] object-contain transition duration-500 group-hover:scale-105"
-    />
-
-</div>
+              <div className="rounded-sm bg-brand-cream overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-auto transition duration-500 group-hover:scale-105"
+                />
+              </div>
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-brand-clay">{String(index + 1).padStart(2, "0")}</p>
               <h3 className="mt-2 font-serif text-2xl font-semibold text-brand-brown">{product.name}</h3>
               <p className="mt-3 leading-7 text-brand-ink/72">{product.description}</p>
@@ -534,43 +532,43 @@ function App() {
             onSubmit={handleSubmit}
             data-brevo-ready="true"
           >
-          <div className="grid gap-5">
-            <label className="grid gap-2 font-bold text-brand-brown">
-              Prénom
-              <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="PRENOM" type="text" autoComplete="given-name" required />
-            </label>
-            <label className="grid gap-2 font-bold text-brand-brown">
-              Email
-              <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="EMAIL" type="email" autoComplete="email" required />
-            </label>
-            <label className="grid gap-2 font-bold text-brand-brown">
-              WhatsApp
-              <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="WHATSAPP" type="tel" autoComplete="tel" inputMode="tel" required />
-            </label>
-            <label className="flex gap-3 text-sm leading-6 text-brand-ink/70">
-              <input className="mt-1 size-4 rounded border-brand-brown/20 text-brand-brown focus:ring-brand-clay" name="CONSENT" type="checkbox" required />
-              J'accepte de recevoir les informations de pré-lancement Haïana par email et WhatsApp.
-            </label>
-            <div className="flex gap-3 rounded-md border border-brand-brown/12 bg-brand-cream p-4 text-sm font-semibold leading-6 text-brand-brown">
-              <ShieldCheck className="mt-0.5 shrink-0 text-brand-clay" size={20} aria-hidden="true" />
-              <p className="m-0">Les 100 premiers inscrits recevront leur code de réduction avant le lancement.</p>
+            <div className="grid gap-5">
+              <label className="grid gap-2 font-bold text-brand-brown">
+                Prénom
+                <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="PRENOM" type="text" autoComplete="given-name" required />
+              </label>
+              <label className="grid gap-2 font-bold text-brand-brown">
+                Email
+                <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="EMAIL" type="email" autoComplete="email" required />
+              </label>
+              <label className="grid gap-2 font-bold text-brand-brown">
+                WhatsApp
+                <input className="min-h-13 rounded-md border border-brand-brown/15 bg-brand-ivory px-4 font-medium text-brand-ink outline-none transition focus:border-brand-clay focus:ring-4 focus:ring-brand-clay/15" name="WHATSAPP" type="tel" autoComplete="tel" inputMode="tel" required />
+              </label>
+              <label className="flex gap-3 text-sm leading-6 text-brand-ink/70">
+                <input className="mt-1 size-4 rounded border-brand-brown/20 text-brand-brown focus:ring-brand-clay" name="CONSENT" type="checkbox" required />
+                J'accepte de recevoir les informations de pré-lancement Haïana par email et WhatsApp.
+              </label>
+              <div className="flex gap-3 rounded-md border border-brand-brown/12 bg-brand-cream p-4 text-sm font-semibold leading-6 text-brand-brown">
+                <ShieldCheck className="mt-0.5 shrink-0 text-brand-clay" size={20} aria-hidden="true" />
+                <p className="m-0">Les 100 premiers inscrits recevront leur code de réduction avant le lancement.</p>
+              </div>
+              {!isLocalDevelopment && <div className="recaptcha-shell" ref={recaptchaContainerRef} />}
+              <button className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-brand-brown px-7 font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-brownDark focus:outline-none focus:ring-2 focus:ring-brand-clay focus:ring-offset-2 focus:ring-offset-white disabled:cursor-wait disabled:opacity-70" type="submit" disabled={submissionStatus === "submitting"}>
+                {submissionStatus === "submitting" ? "Inscription en cours..." : "Je réserve ma place"}
+                <ArrowRight size={19} aria-hidden="true" />
+              </button>
+              {submissionStatus === "success" && (
+                <p className="whitespace-pre-line rounded-md bg-brand-cream p-3 text-sm font-semibold leading-6 text-brand-brown" role="status">
+                  {"Bienvenue parmi Les Premiers ! 🌿\nTu seras notifié dès le lancement de la Ligne Locks.\nVérifie ta boîte mail."}
+                </p>
+              )}
+              {submissionStatus === "error" && (
+                <p className="rounded-md border border-red-900/15 bg-red-50 p-3 text-sm font-semibold leading-6 text-red-900" role="alert">
+                  {formError}
+                </p>
+              )}
             </div>
-            {!isLocalDevelopment && <div className="recaptcha-shell" ref={recaptchaContainerRef} />}
-            <button className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-brand-brown px-7 font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-brownDark focus:outline-none focus:ring-2 focus:ring-brand-clay focus:ring-offset-2 focus:ring-offset-white disabled:cursor-wait disabled:opacity-70" type="submit" disabled={submissionStatus === "submitting"}>
-              {submissionStatus === "submitting" ? "Inscription en cours..." : "Je réserve ma place"}
-              <ArrowRight size={19} aria-hidden="true" />
-            </button>
-            {submissionStatus === "success" && (
-              <p className="whitespace-pre-line rounded-md bg-brand-cream p-3 text-sm font-semibold leading-6 text-brand-brown" role="status">
-                {"Bienvenue parmi Les Premiers ! 🌿\nTu seras notifié dès le lancement de la Ligne Locks.\nVérifie ta boîte mail."}
-              </p>
-            )}
-            {submissionStatus === "error" && (
-              <p className="rounded-md border border-red-900/15 bg-red-50 p-3 text-sm font-semibold leading-6 text-red-900" role="alert">
-                {formError}
-              </p>
-            )}
-          </div>
           </form>
         </div>
       </section>
