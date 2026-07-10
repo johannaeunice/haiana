@@ -571,7 +571,7 @@ function App() {
         </div>
       </section>
 
-      <section className="border-y border-brand-brown/10 bg-white/54 py-16" aria-labelledby="teaser-title">
+      {/* <section className="border-y border-brand-brown/10 bg-white/54 py-16" aria-labelledby="teaser-title">
         <div className="mx-auto grid w-[min(1120px,92vw)] gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-center">
           <div className="flex size-20 items-center justify-center rounded-full bg-brand-brown text-white">
             <DropletMark />
@@ -589,9 +589,9 @@ function App() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="mx-auto w-[min(1120px,92vw)] py-20" aria-labelledby="testimonials-title">
+      {/* <section className="mx-auto w-[min(1120px,92vw)] py-20" aria-labelledby="testimonials-title">
         <div className="max-w-2xl">
           <p className="text-sm font-bold uppercase tracking-[0.12em] text-brand-clay">Bientôt leurs retours</p>
           <h2 id="testimonials-title" className="mt-3 font-serif text-4xl font-semibold leading-tight text-brand-brown sm:text-5xl">
@@ -620,7 +620,7 @@ function App() {
             </article>
           ))}
         </div>
-      </section>
+      </section> */}
 
       <footer className="bg-brand-brownDark py-10 text-white">
         <div className="mx-auto flex w-[min(1120px,92vw)] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -631,17 +631,17 @@ function App() {
           <div className="flex flex-col gap-3 text-sm sm:items-end">
             <a className="inline-flex items-center gap-2 text-white/82 transition hover:text-white" href="https://www.instagram.com/haiana.hair/" target="_blank" rel="noreferrer">
               <AtSign size={18} aria-hidden="true" />
-              @haiana.hair
+              haiana.hair
             </a>
-            <a className="inline-flex items-center gap-2 text-white/82 transition hover:text-white" href="https://www.facebook.com/search/top?q=Ha%C3%AFana%20Hair%20Care%20Products" target="_blank" rel="noreferrer">
+            <a className="inline-flex items-center gap-2 text-white/82 transition hover:text-white" href="https://facebook.com/share/1buPRE43ep/" target="_blank" rel="noreferrer">
               <UsersRound size={18} aria-hidden="true" />
               Haïana Hair Care Products
             </a>
             <div className="flex gap-3">
-              <a className="grid size-11 place-items-center rounded-full border border-white/15 text-white/84 transition hover:bg-white hover:text-brand-brownDark" href="mailto:contact@haiana.com" aria-label="Email Haïana">
+              <a className="grid size-11 place-items-center rounded-full border border-white/15 text-white/84 transition hover:bg-white hover:text-brand-brownDark" href="mailto:haiana.hair@gmail.com" aria-label="Email Haïana">
                 <Mail size={19} aria-hidden="true" />
               </a>
-              <a className="grid size-11 place-items-center rounded-full border border-white/15 text-white/84 transition hover:bg-white hover:text-brand-brownDark" href="https://wa.me/" aria-label="WhatsApp Haïana">
+              <a className="grid size-11 place-items-center rounded-full border border-white/15 text-white/84 transition hover:bg-white hover:text-brand-brownDark" href="https://wa.me/message/J5WDZDR2B4XAB1" aria-label="WhatsApp Haïana">
                 <MessageCircle size={19} aria-hidden="true" />
               </a>
             </div>
