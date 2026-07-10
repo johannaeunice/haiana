@@ -63,17 +63,17 @@ function splitInternationalPhone(value) {
 const products = [
   {
     name: "Huile Routine Locks",
-    label: "Nourrir",
+    image: "/essence.png",
     description: "Pour nourrir les longueurs et préserver la souplesse des locks.",
   },
   {
     name: "Huile Spéciale Pousse",
-    label: "Stimuler",
+    image: "/croissance.png",
     description: "Pour accompagner la croissance et maintenir un cuir chevelu sain.",
   },
   {
     name: "Beurre Whippé Locks",
-    label: "Protéger",
+    image: "/beurre_whippé.png",
     description: "Pour nourrir intensément et protéger les locks de la sécheresse.",
   },
 ];
@@ -425,11 +425,15 @@ function App() {
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {products.map((product, index) => (
             <article className="group rounded-md border border-brand-brown/12 bg-white p-5 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-warm" key={product.name}>
-              <div className="grid aspect-[1.08] place-items-center rounded-sm bg-brand-cream">
-                <div className={`product-bottle product-bottle-${index + 1} scale-110`}>
-                  <span>{product.label}</span>
-                </div>
-              </div>
+              <div className="grid aspect-[1.08] place-items-center rounded-sm bg-brand-cream overflow-hidden">
+
+    <img
+        src={product.image}
+        alt={product.name}
+        className="max-h-[310px] object-contain transition duration-500 group-hover:scale-105"
+    />
+
+</div>
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-brand-clay">{String(index + 1).padStart(2, "0")}</p>
               <h3 className="mt-2 font-serif text-2xl font-semibold text-brand-brown">{product.name}</h3>
               <p className="mt-3 leading-7 text-brand-ink/72">{product.description}</p>
