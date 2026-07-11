@@ -469,18 +469,26 @@ function App() {
           </div>
         </div>
         <div>
+         <p className="mt-20 max-w-xs font-serif text-4xl font-semibold leading-tight">
+              La voix de celles et ceux qu'on n'écoute pas assez.
+            </p>
+          </div>
+        <div>
           <p className="text-sm font-bold uppercase tracking-[0.12em] text-brand-clay">Notre histoire</p>
           <h2 className="mt-3 font-serif text-4xl font-semibold leading-tight text-brand-brown sm:text-5xl">
-            Des soins qui partent d'une vraie réalité.
+            Tout a commencé dans une cuisine, pas un laboratoire.
           </h2>
           <p className="mt-6 text-xl leading-9 text-brand-ink/78">
-            Haïana est née d'une conviction simple : les cheveux afro et les locks méritent des soins pensés pour eux.
+            J'avais 16 ans quand j'ai commencé à m'intéresser de près aux cheveux afro — les miens, ceux de mes proches, et tout ce que je pouvais apprendre à leur sujet.
           </p>
           <p className="mt-5 leading-8 text-brand-ink/72">
-            Derrière Haïana, il y a des années de recherches, d'essais et de travail sur les formulations. Une volonté très personnelle : créer enfin des soins spécifiquement conçus pour les locks, qui comprennent leur besoin de nutrition, de légèreté et de régularité sans jamais les traiter comme un simple type de cheveux parmi d'autres.
+            Des heures de tutoriels YouTube, des dizaines d'huiles testées, des beurres mixés à la main, des masques improvisés avec ce que je trouvais dans ma cuisine et mon frigo. Des échecs aussi — des formules ratées, des essais qui ne donnaient rien, des moments de découragement où je me demandais si j'y arriverais un jour. Chaque tentative, réussie ou non, m'apprenait quelque chose de plus sur ce dont les cheveux afro ont vraiment besoin.
           </p>
           <p className="mt-5 leading-8 text-brand-ink/72">
-            La gamme se construit avec sa communauté. Les questions, les habitudes et les retours de personnes qui portent leurs locks au quotidien guident chaque choix. Haïana veut grandir à leurs côtés, avec des formules utiles, sensorielles et profondément ancrées dans leurs réalités.
+            En 2023, j'ai fait mes locs. J'ai continué avec mes soins habituels, jusqu'à réaliser que les locs ont des besoins bien à elles — et que très peu de marques en parlent, encore moins au Cameroun, où l'offre reste surtout tournée vers les salons plutôt que vers des soins pensés spécifiquement pour elles.
+          </p>
+          <p className="mt-5 leading-8 text-brand-ink/72">
+            J'ai décidé de faire la différence : devenir la voix de celles et ceux qui portent leurs locs au quotidien et qu'on entend trop rarement, surtout au Cameroun. Haïana est né de cette conviction — des soins qui comprennent les locs dans leur besoin de nutrition, de légèreté et de régularité, sans jamais les traiter comme un simple type de cheveux parmi d'autres.
           </p>
         </div>
       </section>
