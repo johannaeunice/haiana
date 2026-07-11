@@ -459,20 +459,15 @@ function App() {
         </div>
       </section>
 
-      <section id="histoire" className="mx-auto grid w-[min(1120px,92vw)] gap-10 py-20 md:grid-cols-[0.92fr_1.08fr] md:items-center">
+  <section id="histoire" className="mx-auto grid w-[min(1120px,92vw)] gap-10 py-20 md:grid-cols-[0.92fr_1.08fr] md:items-center">
         <div className="rounded-md bg-brand-beige p-5">
           <div className="aspect-[4/4.5] rounded-sm bg-[linear-gradient(150deg,#efe0ca,#b98a60)] p-6 text-brand-brown">
             <Leaf size={34} aria-hidden="true" />
             <p className="mt-20 max-w-xs font-serif text-4xl font-semibold leading-tight">
-              Des formules pensées avec respect, patience et précision.
-            </p>
-          </div>
-        </div>
-        <div>
-         <p className="mt-20 max-w-xs font-serif text-4xl font-semibold leading-tight">
               La voix de celles et ceux qu'on n'écoute pas assez.
             </p>
           </div>
+        </div>
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.12em] text-brand-clay">Notre histoire</p>
           <h2 className="mt-3 font-serif text-4xl font-semibold leading-tight text-brand-brown sm:text-5xl">
