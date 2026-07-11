@@ -79,7 +79,7 @@ const products = [
 ];
 
 const benefits = [
-  "10 % de réduction sur toute le pack Rituel Locs",
+  "10 % de réduction sur le pack Rituel Locs",
   "Accès en avant-première avant le lancement public",
   "Actualités exclusives sur les formules et la disponibilité",
   "Communication directe via WhatsApp",
@@ -332,7 +332,7 @@ function App() {
               Pré-lancement exclusif
             </p>
             <h1 className="max-w-2xl font-serif text-[clamp(2.65rem,9.5vw,4.55rem)] font-semibold leading-[0.98] text-brand-brown">
-              Rejoins les premiers clients Haïana et débloque -10 % sur toute le pack Rituel Locs.
+              Rejoins les premiers clients Haïana et débloque -10 % sur le pack Rituel Locs.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-brand-ink/76">
               Des soins conçus pour les locks africaines. Lancement officiel le 1er septembre 2026.
